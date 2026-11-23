@@ -24,15 +24,15 @@ jobs:
       - name: Configure SDK & Licenses
         run: |
           echo "sdk.dir=/usr/local/lib/android/sdk" > local.properties
-          ls -la /usr/local/lib/android/sdk/platforms || true
           yes | /usr/local/lib/android/sdk/cmdline-tools/latest/bin/sdkmanager --licenses >/dev/null 2>&1 || true
 
-      - name: Install Gradle & Build APK
+      - name: Build Debug APK with Gradle 8.9
         run: |
-          sudo apt-get update -o Acquire::Retries=3
-          sudo apt-get install -y --no-install-recommends gradle
-          gradle wrapper --gradle-version 8.9
-          ./gradlew assembleDebug --stacktrace
+          curl -sSL https://services.gradle.org/distributions/gradle-8.9-bin.zip -o /tmp/gradle-8.9.zip
+          unzip -oq /tmp/gradle-8.9.zip -d /tmp/gradle
+          /tmp/gradle/gradle-8.9/bin/gradle wrapper --gradle-version 8.9
+          chmod +x ./gradlew
+          ./gradlew assembleDebug --no-daemon --stacktrace
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
