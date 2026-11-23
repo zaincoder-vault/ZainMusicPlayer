@@ -159,7 +159,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             } catch (Exception ignored) {
             }
-        }, MoreExecutors.mainExecutor());
+        }, ContextCompat.getMainExecutor(this));
     }
 
     private void updateMiniPlayerFromMetadata(@Nullable MediaItem item) {
